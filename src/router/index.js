@@ -12,22 +12,22 @@ export default new Router({
     {
       path: '/',
       name: 'home',
-      component: HomeView, // Página de inicio
+      component: HomeView,
     },
     {
       path: '/addtask',
       name: 'addtask',
-      component: AddTask, // Vista para agregar una tarea
+      component: AddTask,
     },
     {
       path: '/tasklist',
       name: 'tasklist',
-      component: TaskList, // Vista para ver la lista de tareas
+      component: TaskList,
     },
     {
       path: '/combinedview',
       name: 'combinedview',
-      component: CombinedView, // Vista combinada (agregar y ver tareas)
+      component: CombinedView,
     },
   ],
 });
