@@ -1,8 +1,7 @@
 <template>
   <div>
-    <AddTask @add-task="addTaskToList" />
-    <TaskList :tasks="tasks" @delete-task="deleteTask" @toggle-completion="toggleCompletion" />
-    <router-link to="/" class="btn btn-secondary mt-4">Volver a Inicio</router-link>
+    <AddTask @add-task="addTaskToList"/>
+    <TaskList :tasks="tasks" @delete-task="deleteTask"/>
   </div>
 </template>
 
@@ -26,9 +25,6 @@ export default {
     },
     deleteTask(task) {
       this.tasks = this.tasks.filter(t => t.id !== task.id);
-    },
-    toggleCompletion(task) {
-      task.completed = !task.completed;
     },
   },
 };
