@@ -1,69 +1,72 @@
 <template>
-  <div class="container mt-5">
-    <h1 class="text-center mb-4">Lista de Tareas</h1>
-    <div v-if="tasks.length === 0" class="alert alert-warning text-center">
-      No hay tareas. ¡Añade una!
-    </div>
-
-    <div v-for="task in tasks" :key="task.id" class="card mb-3">
-      <div class="card-body d-flex justify-content-between align-items-center">
-        <div>
-          <h5 :style="{ textDecoration: task.completed ? 'line-through' : 'none' }">
-            {{ task.todo }}
-          </h5>
-          <span :class="task.completed ? 'badge bg-success' : 'badge bg-warning'">
-            {{ task.completed ? 'Completada' : 'Pendiente' }}
-          </span>
-        </div>
-
-        <div>
-          <button @click="toggleCompletion(task)" class="btn btn-success ms-2">
-            <i class="bi bi-check-circle"></i> {{ task.completed ? 'Pendiente' : 'Completada' }}
-          </button>
-          <button @click="deleteTask(task)" class="btn btn-danger ms-2">
-            <i class="bi bi-trash"></i> Eliminar
-          </button>
-        </div>
-      </div>
-    </div>
+  <div class="tasklist-container">
+    <h1>Lista de Tareas</h1>
+    <button class="btn btn-primary mb-3" @click="fetchTasks">Cargar Tareas</button>
+    <ul class="task-list">
+      <li v-for="task in tasks" :key="task.id" class="task-item">
+        <span
+          :class="[
+            'badge',
+            task.completed ? 'bg-success' : 'bg-warning text-dark',
+          ]"
+        >
+          {{ task.completed ? "Completada" : "Pendiente" }}
+        </span>
+        <span class="task-text">{{ task.todo }}</span>
+        <button class="btn btn-success btn-sm" @click="toggleCompletion(task)">
+          <i class="bi bi-check-lg"></i> Completar
+        </button>
+        <button class="btn btn-danger btn-sm" @click="deleteTask(task)">
+          <i class="bi bi-trash"></i> Eliminar
+        </button>
+      </li>
+    </ul>
   </div>
 </template>
 
 <script>
 export default {
-  props: ['tasks'],
+  name: "TaskList",
+  data() {
+    return {
+      tasks: [],
+    };
+  },
   methods: {
+    fetchTasks() {
+      fetch("https://dummyjson.com/todos")
+        .then((res) => res.json())
+        .then((data) => {
+          this.tasks = data.todos;
+        });
+    },
     toggleCompletion(task) {
       task.completed = !task.completed;
     },
     deleteTask(task) {
-      this.$emit('delete-task', task);
+      this.tasks = this.tasks.filter((t) => t.id !== task.id);
     },
   },
 };
 </script>
 
 <style scoped>
-.container {
-  max-width: 800px;
-  margin: 0 auto;
+.tasklist-container {
+  text-align: center;
+  padding: 20px;
 }
-
-.card {
-  border: 1px solid #ccc;
-}
-
-.card-body {
+.task-item {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: space-between;
+  margin: 10px 0;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #f9f9f9;
 }
-
-.card-body h5 {
-  margin: 0;
-}
-
-.badge {
-  font-size: 1rem;
+.task-text {
+  flex-grow: 1;
+  margin: 0 10px;
 }
 </style>
